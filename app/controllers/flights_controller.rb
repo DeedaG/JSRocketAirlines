@@ -6,10 +6,15 @@ class FlightsController < ApplicationController
     respond_to do |f|
       f.html {render :index}
       f.json {render json: @flights}
+    end
   end
 
   def show
     @flight = Flight.find(params[:id])
+    respond_to do |f|
+      f.html {render :show}
+      f.json {render json: @flight}
+    end
   end
 
 
