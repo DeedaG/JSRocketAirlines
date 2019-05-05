@@ -1,8 +1,11 @@
 class FlightsController < ApplicationController
-  
+
   def index
     @flights = Flight.all
     @flight = Flight.new
+    respond_to do |f|
+      f.html {render :index}
+      f.json {render json: @flights}
   end
 
   def show
