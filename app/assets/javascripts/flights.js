@@ -38,12 +38,17 @@ class Flight {
     this.bookings = obj.bookings
     this.users = obj.users
   }
+
     static newBookingForm(){
       return (`
 
         <form>
           <input id='flight-name' type='text' name='name'></input><br>
           <input type= 'text' name='destination'></input><br>
+          <label for="booking_Notes">Notes</label><br>
+          <textarea name="booking[description]" id="booking_description"></textarea><br>
+          <label for="booking_Paid">Paid?</label>
+          <input type="checkbox" value="1" name="booking[paid]" id="booking_paid">
           <input type='submit' />
         </form>
         `)
