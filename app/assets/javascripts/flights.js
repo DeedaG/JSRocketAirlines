@@ -2,6 +2,7 @@ $(function() {
   console.log("flights.js is loaded...")
   listenForClick()
   listenForNewBookingFormClick()
+  listenForShowClick()
 });
 
 function listenForClick() {
@@ -27,6 +28,18 @@ function getFlights() {
       console.log(myFlighthtml)
     })
   })
+}
+
+function listenForShowClick() {
+ $(document).on('click', ".show_link", function(event) {
+   event.preventDefault()
+   let id = $(this).attr('data-id');
+   fetch(`/flights/${id}.json`)
+     .then(res => res.json())
+     .then(flight => {
+       console.log(flight)
+    })
+ })
 }
 
 
@@ -76,7 +89,7 @@ Flight.prototype.flighthtml = function() {
     return (`
       <div>
       <p>${this.name}</p>
-      <a href = "/flights/${this.id}">${this.destination}</a><br>
+      <a href = '/flights/${this.id}' data-id= '${this.id}' class='show_link'>${this.destination}</a><br>
 
       <br>
       </div>
