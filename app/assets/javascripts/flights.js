@@ -5,7 +5,7 @@ $(function() {
 });
 
 function listenForClick() {
- $("button#flights-data").on('click', function(event) {
+ $("[href='/flights']").on('click', function(event) {
    event.preventDefault()
    getFlights()
   })
