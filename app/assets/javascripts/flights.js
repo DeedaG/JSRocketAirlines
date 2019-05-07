@@ -25,10 +25,20 @@ function getFlights() {
       let myFlighthtml = myflight.flighthtml()
       document.getElementById('ajax-flights').innerHTML += myFlighthtml
       console.log(myFlighthtml)
-  })
-
+    })
   })
 }
+
+
+function listenForNewBookingFormClick() {
+ $("button#ajax-new-booking").on('click', function(event) {
+   event.preventDefault()
+   let newBookingForm = Flight.newBookingForm()
+   document.querySelector('div#new-booking-form-div').innerHTML = newBookingForm
+   //debugger
+  })
+}
+
 
 class Flight {
   constructor(obj) {
@@ -55,16 +65,6 @@ class Flight {
     }
 }
 
-function listenForNewBookingFormClick() {
- $("button#ajax-new-booking").on('click', function(event) {
-   event.preventDefault()
-   let newBookingForm = Flight.newBookingForm()
-   document.querySelector('div#new-booking-form-div').innerHTML = newBookingForm
-   //debugger
-  })
-}
-
-
 
 Flight.prototype.flighthtml = function() {
    // let flightBookings = this.bookings.map(booking => {
@@ -75,7 +75,9 @@ Flight.prototype.flighthtml = function() {
 
     return (`
       <div>
-      <h3>${this.destination}</h3><p>${this.name}</p>
+      <p>${this.name}</p>
+      <a href = "/flights/${this.id}">${this.destination}</a><br>
+
       <br>
       </div>
       `)
