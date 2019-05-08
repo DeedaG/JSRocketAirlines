@@ -33,12 +33,24 @@ function getFlights() {
 function listenForShowClick() {
  $(document).on('click', ".show_link", function(event) {
    event.preventDefault()
-   let id = $(this).attr('data-id');
-   fetch(`/flights/${id}.json`)
-     .then(res => res.json())
-     .then(flight => {
-       console.log(flight)
-    })
+   var id = $(this).attr('data-id');
+   getflight(id)
+ })
+}
+
+function getflight(id) {
+   $.ajax({
+     url: 'http://localhost:3000/flights',
+     data: {id: id},
+     method: 'get',
+     dataType: 'json'
+   }).done (function(flight) {
+
+     let newFlight = new Flight(flight[id - 1])
+     let flightHtml = newFlight.showflighthtml()
+  //   $("[href='/flights/${id}']").append(flightHtml)
+  $(`a[href ='/flights/${id}']`).append(flightHtml)
+    // console.log(flightHtml)
  })
 }
 
@@ -80,18 +92,29 @@ class Flight {
 
 
 Flight.prototype.flighthtml = function() {
-   // let flightBookings = this.bookings.map(booking => {
-   //   return (`
-   //        ${booking.paid}
-   //      `)
-   // })
+  //   if (`
+  //     (${booking.paid} === 1)
+  //          `)
+  //     return "PAID";
+  //   else
+  //     (`
+  //       (${booking.paid} === 0)
+  //       `)
+  //     return "PAYMENT REQUIRED"
+  // })
 
-    return (`
-      <div>
-      <p>${this.name}</p>
+  return (`
+    <div>
       <a href = '/flights/${this.id}' data-id= '${this.id}' class='show_link'>${this.destination}</a><br>
-
       <br>
-      </div>
-      `)
+    </div>
+    `)
+}
+
+Flight.prototype.showflighthtml = function() {
+
+  return (`
+    ${this.name}
+    ${this.users.count}
+    `)
 }
