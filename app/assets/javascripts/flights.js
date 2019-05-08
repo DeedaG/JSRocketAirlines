@@ -48,9 +48,8 @@ function getflight(id) {
 
      let newFlight = new Flight(flight[id - 1])
      let flightHtml = newFlight.showflighthtml()
-  //   $("[href='/flights/${id}']").append(flightHtml)
-  $(`a[href ='/flights/${id}']`).append(flightHtml)
-    // console.log(flightHtml)
+    document.querySelector('div#show-page').append(flightHtml)
+    //debugger
  })
 }
 
@@ -104,7 +103,7 @@ Flight.prototype.flighthtml = function() {
   // })
 
   return (`
-    <div>
+    <div id='show-page'>
       <a href = '/flights/${this.id}' data-id= '${this.id}' class='show_link'>${this.destination}</a><br>
       <br>
     </div>
@@ -113,8 +112,9 @@ Flight.prototype.flighthtml = function() {
 
 Flight.prototype.showflighthtml = function() {
 
+
   return (`
     ${this.name}
-    ${this.users.count}
+    ${this.user}
     `)
 }
