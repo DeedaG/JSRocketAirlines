@@ -48,8 +48,9 @@ function getflight(id) {
 
      let newFlight = new Flight(flight[id - 1])
      let flightHtml = newFlight.showflighthtml()
-    document.querySelector('div#show-page').append(flightHtml)
-    //debugger
+    document.getElementById('show-page').innerHTML = flightHtml
+    console.log(flightHtml)
+  //  debugger
  })
 }
 
@@ -91,19 +92,9 @@ class Flight {
 
 
 Flight.prototype.flighthtml = function() {
-  //   if (`
-  //     (${booking.paid} === 1)
-  //          `)
-  //     return "PAID";
-  //   else
-  //     (`
-  //       (${booking.paid} === 0)
-  //       `)
-  //     return "PAYMENT REQUIRED"
-  // })
-
   return (`
-    <div id='show-page'>
+    <div id = 'show-page'></div><br>
+    <div>
       <a href = '/flights/${this.id}' data-id= '${this.id}' class='show_link'>${this.destination}</a><br>
       <br>
     </div>
@@ -112,9 +103,19 @@ Flight.prototype.flighthtml = function() {
 
 Flight.prototype.showflighthtml = function() {
 
+  let flightBookings = this.bookings.map(booking => {
+    let time = booking.created_at.slice(0,-14)
+    if (booking.paid === 1)
+      return `
+      ${time}"Customer Booked ${this.destination} ${this.name}"
+      `
+      else
+      return `
+      ***${this.destination}${this.name} available***
+      `
+    })
 
   return (`
-    ${this.name}
-    ${this.user}
+    ${flightBookings}
     `)
-}
+    }
