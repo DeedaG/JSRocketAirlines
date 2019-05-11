@@ -1,6 +1,6 @@
 <h2>Log In</h2>
 
-  <%= form_for @user, url: '/signin' do |f| %>
+  <%= form_for User.new, url: '/signin' do |f| %>
 
     <%= f.label :email %>
     <%= f.email_field :email %>
