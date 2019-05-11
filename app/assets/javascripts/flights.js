@@ -44,9 +44,7 @@ function getflight(id) {
    }).done (function(flight) {
      let newFlight = new Flight(flight[id - 1])
       let flightHtml = newFlight.showflighthtml()
-
     document.querySelector('div#show-page').innerHTML = flightHtml
-
     console.log(flightHtml)
  })
 }
@@ -89,8 +87,8 @@ class Flight {
   static newBookingForm(){
     return (`
       <form class="new_booking" id="new_booking" action="/bookings" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="YuTArG96OCR3cQlWArhrWiUTGg3kKmZ2CH1iECxfwzXfGyR6tIvQjjTF/cv7CeC/HezW+g+dtqnvdt45joXWwA==">
-        <input name='flight_name' type='text_field' >Flight Number</input><br>
-        <input name='flight_destination' type='text_field' >Destination</input><br>
+        <input name='name' type='text_field' >Flight Number</input><br>
+        <input name='destination' type='text_field' >Destination</input><br>
         <label for="booking_Notes">Notes</label>
         <textarea name="booking[description]" id="booking_description"></textarea>
 
@@ -121,19 +119,15 @@ Flight.prototype.showflighthtml = function() {
     let time = booking.created_at.slice(0,-14)
       if (booking.paid === 1)
         return (`
-        <button id='ajax-new-booking'>Book this flight</button>
-        <div id='new-booking-form-div'>[form]</div><br></br>
         ${time}"Customer Booked ${this.destination} ${this.name}"
         `)
-      else
-        return (`
-        <button id='ajax-new-booking'>Book this flight</button>
-        <div id='new-booking-form-div'>[form]</div><br></br>
-        ***${this.destination}${this.name} available***
-        `)
+
       })
   return (`
-    ${flightBookings}
+    <button id='ajax-new-booking'>Book this flight</button>
+    <div id='new-booking-form-div'>[form]</div><br></br>
+    ${flightBookings}<br>
+    ***${this.destination}${this.name} available***
     `)
   }
 
