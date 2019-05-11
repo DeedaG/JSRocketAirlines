@@ -21,7 +21,8 @@ class FlightsController < ApplicationController
    def create
      @flight = Flight.new(flight_params)
      if @flight.save
-       redirect_to flights_path(@flight)
+      # redirect_to flights_path(@flight)
+       render json: @flight
      else
        redirect_to root_path
      end
@@ -39,7 +40,7 @@ class FlightsController < ApplicationController
 
    private
    def flight_params
-     params.require(:flight).permit(:name, :destination, user_ids:[])
+     params.require(:flight).permit(:name, :destination, :users, :bookings, user_ids:[])
    end
 
 end
