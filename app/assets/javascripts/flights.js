@@ -51,31 +51,19 @@ function getflight(id) {
 
 
 function listenForNewBookingFormClick() {
-  $('div#new-booking-form-div').on('submit', function(event) {
+  $(document).on('click', ".booking_link", function(event) {
     event.preventDefault()
   var id = event.target.attributes['data-id'].value;
   const values = $(this).serialize()
   //alert(id);
   debugger
-  $.post('/flights', values).done(function(data) {
-    //debugger
-    const newBooking = new Flight(data)
-    const htmlToAdd = newBooking.newBookingForm()
-    $("booking-page").html("htmlToAdd")
-    //bookAFlight()
-
-// function bookAFlight() {
-
-  // document.querySelector('div#booking-form').innerHTML = bookingForm
-//   //$(".ajax-booking").html('')
-//  bookAFlight()
-//   document.querySelector('div#new-booking-form-div').on('submit', function(event) {
-//     event.preventDefault();
-
-     // $.post('/bookings', values).done(function(data) {
-//       console.log(data)
-//   debugger
-     })
+  // $.post('/flights', values).done(function(data) {
+  //   //debugger
+  //   const newBooking = new Flight(data)
+  //   const htmlToAdd = newBooking.newBookingForm()
+  //   $("booking-page").html("htmlToAdd")
+  //
+  //    })
     })
   }
 
@@ -132,7 +120,7 @@ Flight.prototype.showflighthtml = function() {
     ${flightBookings}<br>
     ***${this.destination}${this.name} available***<br>
       <div id='new-booking-form-div' >
-        <a href ="/flights/${this.id}/bookings/new" data-id="${this.id}">Book this Flight</a>
+        <a href ="/flights/${this.id}/bookings/new" data-id="${this.id}" class='booking_link'>Book this Flight</a>
       </div><br></br>
     `)
   }
