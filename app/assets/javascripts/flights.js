@@ -51,28 +51,33 @@ function getflight(id) {
 
 
 function listenForNewBookingFormClick() {
- $(document).on('click', "#ajax-new-booking", function(event) {
-   event.preventDefault()
-   let bookingForm = Flight.newBookingForm()
-   document.querySelector('div#new-booking-form-div').innerHTML = bookingForm
-  $('#new_booking').on('submit', function(event) {
-    event.preventDefault();
-    //newFlightBooking();\
-    const values = $(this).serialize()
-    $.post('/bookings', values).done(function(data) {
-      var booking = data;
-    //  document.getElementById("show-page").innerHTML = booking
-      //  debugger
-      //  let newBooking = new Flight(flight.booking)
-      //  let bookingHtml = newBooking.newbookinghtml()
-      // document.getElementById('#new_booking').innerHTML = bookingHtml
-      // console.log(bookingHtml)
-
-    })
+  $('div#new-booking-form-div').on('submit', function(event) {
+    event.preventDefault()
+  var id = event.target.attributes['data-id'].value;
+  const values = $(this).serialize()
+  //alert(id);
+  debugger
+  $.post('/flights', values).done(function(data) {
     //debugger
-   })
-  })
- }
+    const newBooking = new Flight(data)
+    const htmlToAdd = newBooking.newBookingForm()
+    $("booking-page").html("htmlToAdd")
+    //bookAFlight()
+
+// function bookAFlight() {
+
+  // document.querySelector('div#booking-form').innerHTML = bookingForm
+//   //$(".ajax-booking").html('')
+//  bookAFlight()
+//   document.querySelector('div#new-booking-form-div').on('submit', function(event) {
+//     event.preventDefault();
+
+     // $.post('/bookings', values).done(function(data) {
+//       console.log(data)
+//   debugger
+     })
+    })
+  }
 
 
 class Flight {
@@ -81,42 +86,42 @@ class Flight {
     this.name = obj.name
     this.destination = obj.destination
     this.bookings = obj.bookings
-    this.users = obj.users
+    this.user = obj.user
   }
 
   static newBookingForm(){
     return (`
-      <form class="new_booking" id="new_booking" action="/bookings" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="✓"><input type="hidden" name="authenticity_token" value="YuTArG96OCR3cQlWArhrWiUTGg3kKmZ2CH1iECxfwzXfGyR6tIvQjjTF/cv7CeC/HezW+g+dtqnvdt45joXWwA==">
-        <input name='name' type='text_field' >Flight Number</input><br>
-        <input name='destination' type='text_field' >Destination</input><br>
-        <label for="booking_Notes">Notes</label>
-        <textarea name="booking[description]" id="booking_description"></textarea>
 
-        <label for="booking_Paid">Paid?</label>
-        <input name="booking[paid]" type="hidden" value="0"><input type="checkbox" value="1" name="booking[paid]" id="booking_paid">
+      <strong> New Flight Booking Form </strong>
 
-        <input value="5" type="hidden" name="booking[flight_id]" id="booking_flight_id">
+          <label for="booking_Notes">Notes</label>
+          <textarea name="booking[description]" id="booking_description"></textarea>
 
-        <input type="submit" name="commit" value="Create Booking" data-disable-with="Create Booking">
+          <label for="booking_Paid">Paid?</label>
+          <input name="booking[paid]" type="hidden" value="0"><input type="checkbox" value="1" name="booking[paid]" id="booking_paid">
+
+          <input  type="hidden" name="booking[flight_id]" id="booking_flight_id">
+
+          <input type="submit" />
       </form>
       `)
     }
   }
 
+
 Flight.prototype.flighthtml = function() {
   return (`
-
-    <div id = 'show-page'></div><br>
-    <div >
-      <a href = '/flights/${this.id}' data-id= '${this.id}' class='show_link'>${this.destination}</a><br>
-      <br>
-    </div>
+    <div id ='show-page' ></div><br>
+      <div >
+        <a href ='/flights/${this.id}' data-id= '${this.id}' class='show_link'>${this.destination}</a><br>
+        <br>
+      </div>
     `)
 }
 
 Flight.prototype.showflighthtml = function() {
   let flightBookings = this.bookings.map(booking => {
-    let time = booking.created_at.slice(0,-14)
+    let time = booking.created_at.slice(0,-14);
       if (booking.paid === 1)
         return (`
         ${time}"Customer Booked ${this.destination} ${this.name}"
@@ -124,21 +129,10 @@ Flight.prototype.showflighthtml = function() {
 
       })
   return (`
-    <button id='ajax-new-booking'>Book this flight</button>
-    <div id='new-booking-form-div'>[form]</div><br></br>
     ${flightBookings}<br>
-    ***${this.destination}${this.name} available***
+    ***${this.destination}${this.name} available***<br>
+      <div id='new-booking-form-div' >
+        <a href ="/flights/${this.id}/bookings/new" data-id="${this.id}">Book this Flight</a>
+      </div><br></br>
     `)
   }
-
-// Flight.prototype.newbookinghtml = function() {
-//   let newBookings = this.bookings.map(booking => {
-//     booking.description
-//     booking.paid
-//   })
-//   return (`
-//     ${this.name}
-//     ${this.destination}
-//     ${newBookings}
-//     `)
-// }
