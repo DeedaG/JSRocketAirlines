@@ -1,5 +1,6 @@
 require 'pry'
 class ApplicationController < ActionController::Base
+  protect_from_forgery with: :exception
 
   def authentication_required
     if !logged_in?
