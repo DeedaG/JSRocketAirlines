@@ -7,6 +7,7 @@ class BookingsController < ApplicationController
     else
       @bookings = Booking.all
     end
+    #render json: @booking
   end
 
   def new
@@ -24,7 +25,7 @@ class BookingsController < ApplicationController
     #raise params.inspect
     #@booking = @flight.bookings.create(booking_params.merge(user_id: current_user.id))
      #binding.pry
-     render json: @booking, status: 201
+     render json: @booking
     ##redirect_to user_path(@booking.user_id)
   end
 
@@ -32,7 +33,6 @@ class BookingsController < ApplicationController
     @booking = Booking.find(params[:id])
     @bookings = current_user.bookings
     #raise params.inspect
-
     respond_to do |f|
       f.html {render :show}
       f.json {render json: @booking}
