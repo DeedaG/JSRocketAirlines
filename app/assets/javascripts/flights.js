@@ -36,6 +36,7 @@ function listenForShowClick() {
 }
 
 function getflight(id) {
+  var id = id;
    $.ajax({
      url: 'http://localhost:3000/flights',
      data: {id: id},
@@ -53,19 +54,30 @@ function getflight(id) {
 function listenForNewBookingFormClick() {
   $(document).on('click', ".booking_link", function(event) {
     event.preventDefault()
-  var id = event.target.attributes['data-id'].value;
-  const values = $(this).serialize()
-  //alert(id);
-  debugger
-  // $.post('/flights', values).done(function(data) {
-  //   //debugger
-  //   const newBooking = new Flight(data)
-  //   const htmlToAdd = newBooking.newBookingForm()
-  //   $("booking-page").html("htmlToAdd")
-  //
-  //    })
-    })
-  }
+    var flight_id = event.target.attributes['data-id'].value;
+  //  alert("we r hack3rz");
+    bookAFlight(flight_id)
+  })
+}
+
+function bookAFlight(flight_id) {
+  //var id = event.target.attributes['data-id'].value;
+  let newBookingForm = Flight.newBookingForm(flight_id)
+ document.querySelector("div#new-booking-form-div").innerHTML = newBookingForm
+
+ const values = $('booking-page').serialize();
+
+    $.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/bookings',
+    data: values,
+    }).done(function(response) {
+ debugger
+      const newBooking = new Flight(data)
+      const htmlAdd = newBooking.newflightbooking()
+      $("#booked-flight").innerHTML = htmlAdd
+ })
+}
 
 
 class Flight {
@@ -77,20 +89,33 @@ class Flight {
     this.user = obj.user
   }
 
-  static newBookingForm(){
+  static newBookingForm(flight_id){
     return (`
+    <div id="booked-flight">
 
+    <form id="booking-page" method="post" action="/bookings">
       <strong> New Flight Booking Form </strong>
 
-          <label for="booking_Notes">Notes</label>
-          <textarea name="booking[description]" id="booking_description"></textarea>
+      <div id="bookingDescription">
+        <label for="booking_Notes">Notes</label>
+        <textarea name="booking[description]" id="booking_description" required></textarea>
 
-          <label for="booking_Paid">Paid?</label>
-          <input name="booking[paid]" type="hidden" value="0"><input type="checkbox" value="1" name="booking[paid]" id="booking_paid">
+      <div id="bookingPaid?">
+        <label for="booking_Paid">Paid?</label>
+        <input name="booking[paid]" type="hidden" value="0"><input type="checkbox" value="1" name="booking[paid]" id="booking_paid">
 
-          <input  type="hidden" name="booking[flight_id]" id="booking_flight_id">
+      <div id="flightId">
+        <select  name="booking[flight_id]" id="booking_flight_id" required>
+          <option value="1">Dallas</option>
+          <option value="2">London</option>
+          <option value="3">Paris</option>
+          <option value="4">New York</option>
+          <option value="5">Los Angeles</option>
+        </select>
 
-          <input type="submit" />
+      <div id="submit">
+        <input type="submit" />
+        </div>
       </form>
       `)
     }
@@ -124,3 +149,17 @@ Flight.prototype.showflighthtml = function() {
       </div><br></br>
     `)
   }
+
+Flight.prototype.newflightbooking = function() {
+  let flightBookings = this.bookings.map(booking => {
+    let time = booking.created_at.slice(0,-14);
+      if (booking.paid === 1)
+        return (`
+        ${time}"Customer Booked ${this.destination} ${this.name}"
+        `)
+      })
+
+  return (`
+    ${flightBookings}
+    `)
+}
