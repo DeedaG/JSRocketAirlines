@@ -1,4 +1,5 @@
 class FlightsController < ApplicationController
+  skip_before_action :verify_authenticity_token
 
   def index
     @flights = Flight.all
@@ -40,7 +41,7 @@ class FlightsController < ApplicationController
 
    private
    def flight_params
-     params.require(:flight).permit(:name, :destination, user_ids:[])
+     params.require(:flight).permit(:name, :destination, :booking, user_ids:[])
    end
 
 end
