@@ -63,20 +63,23 @@ function listenForNewBookingFormClick() {
 function bookAFlight(flight_id) {
   //var id = event.target.attributes['data-id'].value;
   let newBookingForm = Flight.newBookingForm(flight_id)
- document.querySelector("div#new-booking-form-div").innerHTML = newBookingForm
+  document.querySelector("div#new-booking-form-div").innerHTML = newBookingForm
 
- const values = $('booking-page').serialize();
+   $(function () {
+     $('#booking-page').on('submit', function(event) {
+     event.preventDefault();
+     const values = $(this).serialize();
+     $.post("/bookings", values).done(function(data) {
+        console.log(data)
+       $('#show-page').html("")
 
-    $.ajax({
-    type: 'POST',
-    url: 'http://localhost:3000/bookings',
-    data: values,
-    }).done(function(response) {
- debugger
-      const newBooking = new Flight(data)
-      const htmlAdd = newBooking.newflightbooking()
-      $("#booked-flight").innerHTML = htmlAdd
- })
+        const bookedFlight = new Booking(data)
+      //  debugger
+        const addHTML = bookedFlight.newflightbooking()
+       $('#show-page').html(addHTML)
+     })
+    })
+  })
 }
 
 
@@ -150,16 +153,27 @@ Flight.prototype.showflighthtml = function() {
     `)
   }
 
-Flight.prototype.newflightbooking = function() {
-  let flightBookings = this.bookings.map(booking => {
-    let time = booking.created_at.slice(0,-14);
-      if (booking.paid === 1)
-        return (`
-        ${time}"Customer Booked ${this.destination} ${this.name}"
-        `)
-      })
 
-  return (`
-    ${flightBookings}
+  class Booking {
+    constructor(obj) {
+      this.id = obj.id
+      this.paid = obj.paid
+      this.description = obj.description
+      this.flight_id = obj.flight_id
+      this.created_at = obj.created_at
+      this.user = obj.user
+      this.flight = obj.flight
+    }
+  }
+
+Booking.prototype.newflightbooking = function() {
+
+  if (this.paid === 1)
+    return (`
+     <h3>${this.user.email} booked ${this.flight.destination} ${this.flight.name} on ${this.created_at.slice(0,-14)}</h3>
+    `)
+  else
+    return (`
+     <h3>Booking not secured.  PAYMENT REQUIRED for ${this.flight.destination}${this.flight.name}.</h3>
     `)
 }
