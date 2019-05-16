@@ -1,9 +1,11 @@
 $(function() {
   console.log("flights.js is loaded...")
-  listenForClick()
-  listenForNewBookingFormClick()
-  listenForShowClick()
+
+    listenForClick()
+    listenForNewBookingFormClick()
+    listenForShowClick()
 });
+
 
 function listenForClick() {
  $("[href='/flights']").on('click', function(event) {
@@ -89,7 +91,7 @@ class Flight {
     this.name = obj.name
     this.destination = obj.destination
     this.bookings = obj.bookings
-    this.user = obj.user
+    this.users = obj.users
   }
 
   static newBookingForm(flight_id){
