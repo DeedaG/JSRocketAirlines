@@ -4,6 +4,11 @@
 <% if current_user.admin == "1" %>
 
   <h1>**ADMIN***</h1>
+
+  <a class="navbar-brand" href="http://localhost:3000/flights" >Create and Edit Flights</a>
+
+
+
 <% else %>
 
 <h2><%= @user.name %>'s Booked Flights </h2>
