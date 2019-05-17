@@ -1,18 +1,61 @@
 $(function() {
   console.log("flights.js is loaded...")
 
-    listenForClick()
+    listenForNonAbcClick()
+    listenForAbcClick()
     listenForNewBookingFormClick()
     listenForShowClick()
 });
 
 
-function listenForClick() {
- $("[href='/flights']").on('click', function(event) {
+function listenForNonAbcClick() {
+ //$("[href='/flights']").on('click', function(event) {
+ $('#nonabc').on('click', function(event) {
    event.preventDefault()
    getFlights()
   })
 }
+
+function listenForAbcClick() {
+ //$("[href='/flights']").on('click', function(event) {
+ $('#abc').on('click', function(event) {
+
+   event.preventDefault()
+
+   getAbcFlights()
+  })
+}
+
+function getAbcFlights() {
+  $.ajax({
+    url: 'http://localhost:3000/flights',
+    method: 'get',
+    dataType: 'json'
+  }).done (function(flights) {
+
+    flights.sort(function(a, b) {
+      var destinationA = a.destination.toUpperCase(); // ignore upper and lowercase
+      var destinationB = b.destination.toUpperCase(); // ignore upper and lowercase
+      if (destinationA < destinationB) {
+        return -1;
+      }
+      if (destinationA > destinationB) {
+        return 1;
+      }
+      return 0;
+    });
+
+
+  flights.forEach(flight => {
+    let myflight = new Flight(flight)
+      let myFlighthtml = myflight.flighthtml()
+      document.getElementById('ajax-flights').innerHTML += myFlighthtml
+      console.log(myFlighthtml)
+    })
+  })
+}
+
+
 
 function getFlights() {
   $.ajax({
