@@ -2,7 +2,8 @@
   <div class="container">
     <div class="navbar-header">
 
-      <a class="navbar-brand" href="<%= flights_path %>" >See All Flights</a>
+      <a class="navbar-brand" id="nonabc" href="<%= flights_path %>" >See All Flights</a>
+      <a class="navbar-brand" id="abc" href="<%= flights_path %>" >See Flights ABC Order</a>
       <a class="navbar-brand" href="<%= user_bookings_path(current_user.id) %>" >User Booked Flights</a>
       <a class="navbar-brand" href="<%= user_path(current_user) %>" >User Profile</a>
       <a class="navbar-brand" href="/sessions/destroy" >Log Out</a>

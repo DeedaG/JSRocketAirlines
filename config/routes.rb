@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     post '/signin' => 'sessions#create'
 
     get '/bookings/notpaid' => 'bookings#notpaid'
-
+    get 'current_user' => "users#current_user"
 
   resources :users
   resources :bookings
