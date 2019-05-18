@@ -148,12 +148,26 @@ class Flight {
         <label for="booking_Notes">Notes</label>
         <textarea name="booking[description]" id="booking_description" required></textarea>
 
+      <div id="bookingLuggage">
+        <label for="booking_Luggage">Number of Bags (between 1 and 4): </label>
+        <input type="number" name="booking[luggage]" id="booking_luggage" required></input>
+
+      <div id="bookingFlight_class">
+        <label for="booking_Flight_class">Choose Flight Class </label>
+        <select name="booking[flight_class]" id="booking_flight_class" required>
+          <option value="First"> First Class</option>
+          <option value="Business"> Business Class</option>
+          <option value="Economy"> Economy Class</option>
+        </select>
+
+
       <div id="bookingPaid?">
         <label for="booking_Paid">Paid?</label>
         <input name="booking[paid]" type="hidden" value="0"><input type="checkbox" value="1" name="booking[paid]" id="booking_paid">
 
       <div id="flightId">
-        <select  name="booking[flight_id]" id="booking_flight_id" required>
+      <label for="flight_Id">Choose a Flight</label>
+        <select name="booking[flight_id]" id="booking_flight_id" required>
           <option value="1">Dallas</option>
           <option value="2">London</option>
           <option value="3">Paris</option>
@@ -185,13 +199,13 @@ Flight.prototype.showflighthtml = function() {
     let time = booking.created_at.slice(0,-14);
       if (booking.paid === 1)
         return (`
-        ${time}"Customer Booked ${this.destination} ${this.name}"
+        ${time} Customer Booked ${this.destination} ${this.name} <br>
         `)
 
       })
   return (`
     ${flightBookings}<br>
-    ***${this.destination}${this.name} available***<br>
+    ***${this.destination}${this.name} available***<br></br>
       <div id='new-booking-form-div' >
         <a href ="/flights/${this.id}/bookings/new" data-id="${this.id}" class='booking_link'>Book this Flight</a>
       </div><br></br>
@@ -204,6 +218,8 @@ Flight.prototype.showflighthtml = function() {
       this.id = obj.id
       this.paid = obj.paid
       this.description = obj.description
+      this.luggage = obj.luggage
+      this.flight_class = obj.flight_class
       this.flight_id = obj.flight_id
       this.created_at = obj.created_at
       this.user = obj.user
@@ -215,7 +231,13 @@ Booking.prototype.newflightbooking = function() {
 
   if (this.paid === 1)
     return (`
-     <h3>${this.user.email} booked ${this.flight.destination} ${this.flight.name} on ${this.created_at.slice(0,-14)}</h3>
+     <h3>Booking Confirmation</h3>
+     <p>Passenger: ${this.user.email}</p>
+     <p>Destination: ${this.flight.destination}</p>
+     <p>Flight Number: ${this.flight.name}</p>
+     <p>Class: ${this.flight_class}</p>
+     <p>Date Booked: ${this.created_at.slice(0,-14)}</p>
+     <p>Number of Bags: ${this.luggage}</p>
     `)
   else
     return (`
